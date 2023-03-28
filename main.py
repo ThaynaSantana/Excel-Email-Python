@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # importar a base de dados
+print("Importando base de dados...")
 table_sales = pd.read_excel('Vendas.xlsx')
 
 # faturamento por loja
@@ -19,16 +20,16 @@ ticket_medio = ticket_medio.rename(columns={0: 'Ticket Medio'})
 # enviar um email com relatorio
 
 # variables
-
-sender_email = 'maneiramadeira@gmail.com'
-receiver_email = 'thaynas.s502@gmail.com'
-password = 'mnqmbyqordsrwfbl'
+sender_email = str(input("Insira o email REMETENTE: "))
+password = str(input("Digite a senha: "))
+receiver_email = str(input("Insira o email DESTINATARIO: "))
+subject = str(input("Insira o ASSUNTO do email: "))
 
 # setup the parameters of the message
 msg = MIMEMultipart()
-msg['From'] = 'maneiramadeira@gmail.com'
-msg['To'] = 'thaynas.s502@gmail.com'
-msg['Subject'] = "Relatorio de Vendas"
+msg['From'] = sender_email
+msg['To'] = receiver_email
+msg['Subject'] = subject
 html = f"""
 <html>
     <body>
@@ -60,6 +61,5 @@ part = MIMEText(html, "html")
 msg.attach(part)
 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 server.login(sender_email, password)
-server.sendmail(
-        sender_email, receiver_email, msg.as_string()
-    )
+server.sendmail(sender_email, receiver_email, msg.as_string())
+server.quit()
